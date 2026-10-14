@@ -1,0 +1,167 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CASE 404 — Arsip Investigasi</title>
+<style>
+:root{--bg:#0b0e13;--panel:#131923;--panel2:#192230;--line:#2b3747;--text:#e8edf4;--muted:#94a3b8;--red:#ff5c68;--gold:#e8bd68;--green:#66d9a7;--blue:#83b8ff}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#172130 0,#0b0e13 60%);color:var(--text);font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+header{padding:22px clamp(16px,4vw,48px);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:16px;background:#0b0e13d9;position:sticky;top:0;z-index:5;backdrop-filter:blur(12px)}
+.brand{display:flex;align-items:center;gap:12px}.badge{width:44px;height:44px;display:grid;place-items:center;border:1px solid var(--red);color:var(--red);font-weight:900;font-size:20px;transform:rotate(-5deg)}h1{font-size:19px;letter-spacing:3px;margin:0}.sub{color:var(--muted);font-size:12px;letter-spacing:1.4px}.status{color:var(--gold);font-size:12px;letter-spacing:1px;border:1px solid #5e4c2b;padding:7px 10px;border-radius:3px}
+main{max-width:1200px;margin:auto;padding:28px clamp(14px,3vw,32px) 60px}.hero{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;margin-bottom:20px}.panel{background:linear-gradient(145deg,#151c27,#10151d);border:1px solid var(--line);border-radius:8px;box-shadow:0 12px 40px #0002}.case-intro{padding:26px;position:relative;overflow:hidden}.case-intro:after{content:"404";position:absolute;right:16px;bottom:-42px;font-size:140px;font-weight:900;color:#ffffff08;letter-spacing:-8px;pointer-events:none}.eyebrow{color:var(--red);font-size:11px;letter-spacing:2px;font-weight:800}.case-intro h2{font-size:clamp(25px,4vw,39px);line-height:1.1;margin:10px 0 14px;max-width:600px}.case-intro p{max-width:660px;color:#bac5d4}.case-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{font-size:11px;border:1px solid var(--line);color:var(--muted);padding:5px 9px;border-radius:3px}.briefing{padding:22px}.briefing h3,.section-title{margin:0 0 12px;font-size:13px;letter-spacing:1.5px;text-transform:uppercase}.briefing ul{padding-left:18px;margin:0;color:#bac5d4}.briefing li{margin:8px 0}.progress-wrap{margin-top:18px}.progress-label{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-bottom:7px}.bar{height:6px;background:#283241;border-radius:20px;overflow:hidden}.bar span{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--red),var(--gold));transition:width .3s}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:22px 0}.tab,button{font:inherit;cursor:pointer;border:1px solid var(--line);background:#141b25;color:var(--text);padding:10px 13px;border-radius:5px;transition:.18s}.tab:hover,button:hover{border-color:var(--blue);transform:translateY(-1px)}.tab.active{background:#28384d;border-color:var(--blue);color:white}.tab .count{color:var(--gold);margin-left:5px}
+.view{display:none}.view.active{display:block}.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.card{padding:18px;min-height:200px;display:flex;flex-direction:column}.card .icon{font-size:25px;margin-bottom:10px}.card h3{font-size:16px;margin:0 0 7px}.card p{color:var(--muted);font-size:13px;margin:0 0 14px;flex:1}.card button{align-self:flex-start;font-size:12px}.tag{font-size:10px;letter-spacing:1px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}.locked{opacity:.48}.locked button{cursor:not-allowed}.evidence-item{display:flex;align-items:flex-start;gap:12px;padding:14px;border-bottom:1px solid var(--line)}.evidence-item:last-child{border-bottom:0}.evidence-icon{font-size:23px}.evidence-item h4{margin:0 0 3px}.evidence-item p{margin:0;color:var(--muted);font-size:13px}.empty{padding:30px;text-align:center;color:var(--muted)}
+.dialogue{padding:22px}.dialogue-head{display:flex;gap:14px;align-items:center;margin-bottom:16px}.avatar{width:54px;height:54px;border:1px solid var(--line);border-radius:6px;display:grid;place-items:center;font-size:26px;background:#202a38}.dialogue h3{margin:0}.dialogue .role{font-size:12px;color:var(--muted)}.quote{background:#0c1118;border-left:3px solid var(--gold);padding:15px 17px;color:#d2dae5;border-radius:0 5px 5px 0;margin:14px 0}.choices{display:grid;gap:9px}.choices button{text-align:left;background:#18212d}.choices button:before{content:"↳";color:var(--gold);margin-right:10px}.notice{padding:12px 14px;border:1px solid #4a4028;background:#211d14;color:#ead8ae;border-radius:5px;margin:14px 0;font-size:13px}
+.board{padding:20px;min-height:300px;background-color:#1b1716;background-image:radial-gradient(#e5c78b20 1px,transparent 1px);background-size:18px 18px}.board-inner{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}.note{background:#e9d9a8;color:#28251d;padding:13px;min-height:100px;box-shadow:2px 4px 8px #0005;transform:rotate(var(--rot,1deg));font-family:Georgia,serif}.note strong{display:block;font-size:13px;margin-bottom:7px}.note p{font-size:12px;margin:0}.string{color:#f19a90;text-align:center;font-size:12px;padding:8px}
+.accuse-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.suspect{padding:20px}.suspect h3{margin:0 0 4px}.suspect .job{color:var(--gold);font-size:12px;margin-bottom:12px}.suspect p{color:var(--muted);font-size:13px}.suspect button{width:100%;margin-top:10px}.result{padding:24px;text-align:center}.result .big{font-size:52px}.result h2{margin:4px 0 12px}.result p{max-width:650px;margin:0 auto 18px;color:#c1cbd9}
+footer{border-top:1px solid var(--line);padding:20px;text-align:center;color:#657286;font-size:11px;letter-spacing:1px}
+.modal-backdrop{position:fixed;inset:0;background:#000b;display:none;place-items:center;padding:16px;z-index:10}.modal-backdrop.show{display:grid}.modal{max-width:560px;width:100%;padding:24px;max-height:85vh;overflow:auto}.modal h2{margin-top:0}.modal p{color:#c2ccda}.modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}
+@media(max-width:800px){.hero{grid-template-columns:1fr}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.board-inner{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){header{align-items:flex-start}.status{display:none}.grid,.accuse-grid{grid-template-columns:1fr}.case-intro,.briefing{padding:20px}.board-inner{grid-template-columns:1fr}.tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}.tab{padding:9px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><div class="badge">?</div><div><h1>CASE 404</h1><div class="sub">UNIT INVESTIGASI • ARSIP DIGITAL</div></div></div>
+  <div class="status">● KASUS AKTIF</div>
+</header>
+<main>
+  <section class="hero">
+    <div class="panel case-intro">
+      <div class="eyebrow">BERKAS #404-17 / BELUM TERPECAHKAN</div>
+      <h2>Hilangnya Siswa<br>di Malam Hujan</h2>
+      <p>Pukul 22.13, siswa bernama <b>Raka Pradana</b> menghilang dari SMA Purnama. Ponselnya ditemukan di ruang arsip. Lima orang terakhir mengaku melihatnya—tetapi kesaksian mereka tidak semuanya cocok.</p>
+      <div class="case-meta"><span class="pill">LOKASI: SMA PURNAMA</span><span class="pill">STATUS: MISTERI</span><span class="pill">TINGKAT: MENENGAH</span></div>
+    </div>
+    <aside class="panel briefing">
+      <h3>📋 Misi penyelidik</h3>
+      <ul><li>Periksa lokasi dan kumpulkan bukti.</li><li>Wawancarai saksi dan cari kontradiksi.</li><li>Hubungkan petunjuk di papan investigasi.</li><li>Pilih tersangka dan ungkap kebenaran.</li></ul>
+      <div class="progress-wrap"><div class="progress-label"><span>PROGRES INVESTIGASI</span><b id="progressText">0%</b></div><div class="bar"><span id="progressBar"></span></div></div>
+      <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap"><button onclick="resetCase()">↻ Mulai ulang</button><button onclick="showHelp()">? Panduan</button></div>
+    </aside>
+  </section>
+
+  <nav class="tabs" aria-label="Menu investigasi">
+    <button class="tab active" data-view="locations">📍 Lokasi <span class="count" id="locationCount">0/4</span></button>
+    <button class="tab" data-view="witnesses">💬 Saksi <span class="count" id="witnessCount">0/5</span></button>
+    <button class="tab" data-view="evidence">🗃️ Bukti <span class="count" id="evidenceCount">0</span></button>
+    <button class="tab" data-view="board">🧷 Papan Kasus</button>
+    <button class="tab" data-view="accuse">⚖️ Kesimpulan</button>
+  </nav>
+
+  <section class="view active" id="locations"><div class="grid" id="locationGrid"></div></section>
+  <section class="view" id="witnesses"><div class="grid" id="witnessGrid"></div></section>
+  <section class="view" id="evidence"><div class="panel" id="evidenceList"></div></section>
+  <section class="view" id="board"><div class="panel board"><h3 class="section-title">PAPAN INVESTIGASI • CATATAN YANG SUDAH DITEMUKAN</h3><div class="board-inner" id="boardNotes"></div><div class="string" id="boardHint">Kumpulkan bukti untuk mulai menghubungkan petunjuk.</div></div></section>
+  <section class="view" id="accuse"><div class="panel" style="padding:22px"><div class="eyebrow">TAHAP AKHIR</div><h2 style="margin:7px 0">Siapa yang bertanggung jawab?</h2><p style="color:var(--muted)">Pastikan kamu sudah memeriksa bukti dan mendengar kesaksian. Pilihanmu akan menentukan laporan akhir.</p><div class="accuse-grid" id="suspectGrid"></div></div></section>
+</main>
+<footer>CASE 404 • SIMULASI DETEKTIF FIKSI • SEMUA TOKOH DAN PERISTIWA REKAAN</footer>
+
+<div class="modal-backdrop" id="modalBackdrop" role="dialog" aria-modal="true"><div class="panel modal"><div class="eyebrow" id="modalEyebrow">BERKAS INVESTIGASI</div><h2 id="modalTitle"></h2><div id="modalBody"></div><div class="modal-actions"><button onclick="closeModal()">Tutup</button></div></div></div>
+<script>
+const evidenceData = {
+  wetshoe:{title:"Jejak sepatu basah",icon:"👣",text:"Jejak air dari pintu belakang menuju lorong ruang musik. Ukurannya besar, tetapi jejak berhenti sebelum mencapai gerbang.",source:"Halaman belakang"},
+  timetable:{title:"Jadwal piket yang diubah",icon:"📄",text:"Nama Dimas dicoret dari jadwal piket pukul 21.00. Tinta koreksinya masih baru.",source:"Ruang kelas"},
+  tornnote:{title:"Sobekan catatan",icon:"📝",text:"Tulisan yang terbaca: “22.13 — ruang arsip — bawa kunci cadangan.” Ada bekas tinta biru.",source:"Ruang arsip"},
+  phone:{title:"Ponsel Raka",icon:"📱",text:"Pesan terakhir pukul 22.08: “Aku sudah tahu siapa yang memindahkan berkas itu.” Pesan dikirim ke kontak bernama D.",source:"Ruang arsip"},
+  key:{title:"Kunci cadangan",icon:"🗝️",text:"Kunci berlabel RUANG ARSIP. Ditemukan di dekat meja petugas keamanan, bukan di lemari kunci.",source:"Pos keamanan"},
+  log:{title:"Buku tamu malam",icon:"📚",text:"Catatan menunjukkan seseorang masuk pukul 21.47 dengan tanda tangan yang hanya berupa huruf “D”. Kolom keluar dibiarkan kosong.",source:"Pos keamanan"},
+  umbrella:{title:"Payung merah",icon:"☂️",text:"Payung merah tertinggal di koridor. Ujungnya bersih dan kering, padahal hujan deras sejak pukul 21.30.",source:"Koridor utama"},
+  file:{title:"Berkas lomba yang hilang",icon:"🗂️",text:"Map lomba sains milik Raka kosong. Di sampulnya tertulis catatan kecil: “Bukan soal menang, tapi siapa yang menyalin.”",source:"Ruang arsip"}
+};
+const locations = [
+ {id:"yard",name:"Halaman Belakang",icon:"🌧️",tag:"LOKASI A",desc:"Tanah becek, lampu berkedip, dan jejak yang mengarah ke lorong.",clues:["wetshoe"],text:"Hujan menutupi banyak jejak. Namun, ada bekas sepatu basah yang seolah sengaja berhenti di dekat pintu servis."},
+ {id:"class",name:"Ruang Kelas 2B",icon:"🏫",tag:"LOKASI B",desc:"Kelas kosong dengan jadwal piket yang tampak baru diubah.",clues:["timetable"],text:"Di papan jadwal, nama Dimas dicoret. Guru piket berkata jadwal itu masih utuh saat sore hari."},
+ {id:"archive",name:"Ruang Arsip",icon:"🗄️",tag:"LOKASI C",desc:"Rak dokumen berdebu. Ponsel Raka ditemukan di sini.",clues:["tornnote","phone","file"],text:"Laci bawah terbuka. Ada sobekan catatan, ponsel Raka, dan map lomba sains yang isinya telah diambil."},
+ {id:"guard",name:"Pos Keamanan",icon:"🔦",tag:"LOKASI D",desc:"Buku tamu, gantungan kunci, dan rekaman kamera yang terputus.",clues:["key","log"],text:"Petugas keamanan mengaku tak meninggalkan pos. Tetapi kunci cadangan dan buku tamu menceritakan hal yang berbeda."},
+ {id:"corridor",name:"Koridor Utama",icon:"☂️",tag:"LOKASI E",desc:"Koridor panjang dengan payung merah yang tertinggal.",clues:["umbrella"],text:"Payung merah terlihat terlalu kering untuk malam berhujan. Seseorang mungkin baru saja datang dari dalam gedung."}
+];
+const witnesses = [
+ {id:"dimas",name:"Dimas Arya",job:"Ketua kelas",icon:"🧑‍🎓",desc:"Mengatakan pulang pukul 21.00.",statement:"Aku pulang sebelum jam sembilan. Aku tidak tahu apa-apa tentang ruang arsip.",questions:[
+  {q:"Tanya soal jadwal piket",a:"Jadwal itu? Aku tidak mengubahnya. Mungkin guru yang mencoret.",clue:"timetable",unlock:"Setelah menunjukkan jadwal yang diubah, Dimas terlihat gelisah."},
+  {q:"Tanya pesan terakhir Raka",a:"Raka memang curiga ada yang menyalin berkas lomba. Dia bilang ingin bicara denganku, tapi aku tak menemuinya.",clue:"phone",unlock:"Dimas mengakui Raka mengirim pesan, tetapi bersikeras tidak datang ke sekolah."}
+ ]},
+ {id:"naya",name:"Naya Putri",job:"Anggota klub sains",icon:"👩‍🔬",desc:"Teman satu tim Raka dalam lomba sains.",statement:"Raka takut hasil proyeknya dicuri. Dia bilang punya bukti, tapi tidak pernah memberitahuku siapa pelakunya.",questions:[
+  {q:"Tanya soal berkas lomba",a:"Berkas itu berisi rancangan asli Raka. Kalau hilang, orang lain bisa mengaku sebagai pembuatnya.",clue:"file",unlock:"Naya menjelaskan bahwa berkas lomba adalah alasan Raka datang malam itu."},
+  {q:"Tanya tentang payung merah",a:"Itu mirip payung milik Dimas. Dia selalu membawanya, bahkan saat langit cerah.",clue:"umbrella",unlock:"Naya menghubungkan payung merah dengan Dimas."}
+ ]},
+ {id:"bu_rani",name:"Bu Rani",job:"Guru pembimbing",icon:"👩‍🏫",desc:"Pembimbing klub sains dan penjaga berkas lomba.",statement:"Saya pulang pukul 20.30. Saya tidak punya alasan kembali ke sekolah.",questions:[
+  {q:"Tanya siapa yang punya akses arsip",a:"Ketua kelas dan petugas keamanan punya alasan untuk mengambil kunci. Tapi kunci cadangan seharusnya tersimpan.",clue:"key",unlock:"Bu Rani mengonfirmasi bahwa kunci cadangan seharusnya terkunci."},
+  {q:"Tanya kapan berkas terakhir terlihat",a:"Saya melihat map itu sekitar pukul 19.00. Setelah itu, saya tidak kembali ke ruang arsip.",clue:"file",unlock:"Bu Rani memastikan map itu masih ada sebelum malam."}
+ ]},
+ {id:"pak_seno",name:"Pak Seno",job:"Petugas keamanan",icon:"🧔",desc:"Bertugas menjaga pintu sekolah pada malam kejadian.",statement:"Saya di pos sepanjang malam. Tak ada orang masuk setelah jam sembilan.",questions:[
+  {q:"Tanya buku tamu",a:"Buku itu kadang diisi terlambat. Huruf D itu bisa saja orang yang lupa menulis nama lengkap.",clue:"log",unlock:"Pak Seno mengakui catatan tamu tidak selalu diperiksa."},
+  {q:"Tanya kunci cadangan",a:"Kunci itu mestinya ada di lemari. Saya tidak tahu kenapa berada di meja.",clue:"key",unlock:"Pak Seno tidak bisa menjelaskan mengapa kunci ada di luar lemari."}
+ ]},
+ {id:"fajar",name:"Fajar Mahesa",job:"Penjaga kantin",icon:"🧑‍🍳",desc:"Orang terakhir yang mengaku melihat Raka.",statement:"Aku menutup kantin pukul 21.15. Raka berjalan ke arah gerbang, bukan ke ruang arsip.",questions:[
+  {q:"Tanya jejak di halaman",a:"Aku melihat seseorang lewat pintu belakang saat hujan mulai deras. Aku tidak yakin siapa, tapi sepatunya basah.",clue:"wetshoe",unlock:"Fajar mengingat seseorang masuk kembali melalui halaman belakang."},
+  {q:"Tanya waktu kejadian",a:"Jam kantin tertinggal tujuh menit. Aku mungkin salah soal waktu saat melihat Raka.",clue:"tornnote",unlock:"Kesaksian Fajar soal waktu ternyata tidak terlalu dapat diandalkan."}
+ ]}
+];
+const suspects = [
+ {id:"dimas",name:"Dimas Arya",job:"Ketua kelas",icon:"🧑‍🎓",why:"Punya motif terkait berkas lomba, dan huruf D muncul pada buku tamu.",ending:"Dimas akhirnya mengakui datang kembali untuk mengambil berkas lomba yang ia salin. Ia berdebat dengan Raka, lalu mengunci pintu arsip saat pergi. Raka ternyata keluar melalui pintu servis beberapa menit kemudian dan bersembunyi di ruang musik karena takut. Dimas bertanggung jawab atas pencurian berkas dan kebohongan, tetapi Raka ditemukan selamat.",correct:true},
+ {id:"naya",name:"Naya Putri",job:"Anggota klub sains",icon:"👩‍🔬",why:"Ia tahu isi berkas dan memiliki alasan untuk melindungi proyek tim.",ending:"Naya memang menyembunyikan informasi, tetapi bukan pelaku utama. Ia melindungi Raka karena tahu rancangan itu disalin. Bukti yang kamu kumpulkan mengarah ke orang lain.",correct:false},
+ {id:"bu_rani",name:"Bu Rani",job:"Guru pembimbing",icon:"👩‍🏫",why:"Ia memiliki akses ke arsip dan mengetahui isi berkas.",ending:"Bu Rani punya akses ke arsip, tetapi catatan waktu dan saksi tidak mendukung tuduhan itu. Ia menyembunyikan kesalahan administrasi, bukan mengambil berkas.",correct:false},
+ {id:"pak_seno",name:"Pak Seno",job:"Petugas keamanan",icon:"🧔",why:"Ia mengendalikan akses pintu dan buku tamu.",ending:"Pak Seno lalai memeriksa buku tamu dan menyimpan kunci dengan ceroboh. Namun, bukti menunjukkan ia bukan orang yang mengambil berkas.",correct:false}
+];
+let state={found:[],visited:[],talked:[],asked:[],done:false};
+function save(){try{localStorage.setItem("case404-save",JSON.stringify(state))}catch(e){}}
+function load(){try{const s=JSON.parse(localStorage.getItem("case404-save"));if(s)state={...state,...s}}catch(e){}}
+function render(){
+ document.getElementById("locationGrid").innerHTML=locations.map(l=>`<article class="panel card"><div class="icon">${l.icon}</div><div class="tag">${l.tag} ${state.visited.includes(l.id)?"• DIPERIKSA":"• BELUM DIPERIKSA"}</div><h3>${l.name}</h3><p>${l.desc}</p><button onclick="inspectLocation('${l.id}')">${state.visited.includes(l.id)?"Periksa kembali":"Periksa lokasi"} →</button></article>`).join("");
+ document.getElementById("witnessGrid").innerHTML=witnesses.map(w=>`<article class="panel card"><div class="icon">${w.icon}</div><div class="tag">${state.talked.includes(w.id)?"• SUDAH DIWAWANCARAI":"• SAKSI"}</div><h3>${w.name}</h3><p>${w.job} — ${w.desc}</p><button onclick="interview('${w.id}')">Wawancarai →</button></article>`).join("");
+ const ev=document.getElementById("evidenceList");
+ ev.innerHTML=state.found.length?state.found.map(id=>{let e=evidenceData[id];return `<div class="evidence-item"><div class="evidence-icon">${e.icon}</div><div><h4>${e.title}</h4><p>${e.text}</p><div class="tag" style="margin-top:7px">Ditemukan: ${e.source}</div></div></div>`}).join(""):'<div class="empty">Belum ada bukti. Periksa lokasi untuk menemukan petunjuk.</div>';
+ document.getElementById("boardNotes").innerHTML=state.found.length?state.found.map((id,i)=>{let e=evidenceData[id];return `<div class="note" style="--rot:${i%2?'-1.5deg':'1.2deg'}"><strong>${e.icon} ${e.title}</strong><p>${e.text}</p></div>`}).join(""):'<div class="empty" style="grid-column:1/-1;color:#d8c8a2">Papan masih kosong.</div>';
+ document.getElementById("boardHint").textContent=state.found.length>=4?"Petunjuk mulai membentuk pola: seseorang kembali ke sekolah dan mengincar berkas lomba.":"Kumpulkan minimal beberapa petunjuk untuk melihat pola kasus.";
+ document.getElementById("suspectGrid").innerHTML=suspects.map(s=>`<article class="panel suspect"><div class="icon">${s.icon}</div><h3>${s.name}</h3><div class="job">${s.job}</div><p>${s.why}</p><button onclick="accuse('${s.id}')">Tetapkan sebagai tersangka</button></article>`).join("");
+ document.getElementById("locationCount").textContent=`${state.visited.length}/5`;document.getElementById("witnessCount").textContent=`${state.talked.length}/5`;document.getElementById("evidenceCount").textContent=state.found.length;
+ const score=Math.round((state.visited.length/5*25)+(state.talked.length/5*25)+(state.found.length/8*50));document.getElementById("progressText").textContent=score+"%";document.getElementById("progressBar").style.width=score+"%";
+ document.querySelectorAll(".tab").forEach(t=>{let n=t.dataset.view;t.classList.toggle("active",document.getElementById(n).classList.contains("active"))});
+}
+function showModal(title,body,eyebrow="BERKAS INVESTIGASI"){document.getElementById("modalTitle").textContent=title;document.getElementById("modalBody").innerHTML=body;document.getElementById("modalEyebrow").textContent=eyebrow;document.getElementById("modalBackdrop").classList.add("show")}
+function closeModal(){document.getElementById("modalBackdrop").classList.remove("show")}
+function addEvidence(id){if(!state.found.includes(id)){state.found.push(id);return true}return false}
+function inspectLocation(id){
+ const l=locations.find(x=>x.id===id);state.visited.includes(id)||state.visited.push(id);
+ let found=[];l.clues.forEach(c=>{if(addEvidence(c))found.push(evidenceData[c])});save();render();
+ let body=`<p>${l.text}</p>`;
+ if(found.length)body+=`<div class="notice">Bukti baru ditemukan: ${found.map(e=>e.icon+" "+e.title).join(", ")}</div>`;
+ else body+='<div class="notice">Kamu sudah mengumpulkan semua bukti yang tampak di lokasi ini. Coba wawancarai saksi untuk mendapat konteks baru.</div>';
+ body+='<p style="font-size:13px">Catatan penyelidik: perhatikan waktu, akses kunci, dan alasan seseorang ingin mengambil berkas.</p>';
+ showModal(l.name,body,l.tag);
+}
+function interview(id){
+ const w=witnesses.find(x=>x.id===id);state.talked.includes(id)||state.talked.push(id);save();render();
+ let qs=w.questions.map((q,i)=>`<button onclick="askQuestion('${id}',${i})">${q.q}</button>`).join("");
+ showModal("Wawancara: "+w.name,`<div class="dialogue-head"><div class="avatar">${w.icon}</div><div><b>${w.name}</b><div class="role">${w.job}</div></div></div><div class="quote">“${w.statement}”</div><p>Pilih topik yang ingin kamu tanyakan:</p><div class="choices">${qs}</div>`);
+}
+function askQuestion(id,i){
+ const w=witnesses.find(x=>x.id===id),q=w.questions[i],key=id+"-"+i;
+ if(!state.asked.includes(key)){state.asked.push(key);if(q.clue)addEvidence(q.clue);save();render()}
+ showModal("Catatan wawancara",`<div class="quote">“${q.a}”</div><div class="notice">${q.unlock}</div><p style="font-size:13px">Bukti terkait telah ditambahkan jika belum pernah ditemukan. Kamu bisa kembali dan menanyakan topik lain.</p><button onclick="interview('${id}')">Tanyakan hal lain</button>`);
+}
+function accuse(id){
+ const s=suspects.find(x=>x.id===id);
+ if(state.found.length<3||state.talked.length<2){showModal("Bukti belum cukup",'<p>Kesimpulan yang terburu-buru bisa salah. Cobalah kumpulkan setidaknya <b>3 bukti</b> dan wawancarai <b>2 saksi</b> sebelum menetapkan tersangka.</p>','PERINGATAN');return}
+ state.done=true;save();
+ const good=s.correct;
+ showModal(good?"KASUS TERPECAHKAN":"KESIMPULAN BELUM TEPAT",`<div class="result"><div class="big">${good?"🕵️‍♂️":"⚠️"}</div><h2>${good?"Kerja bagus, penyelidik.":"Ada bagian yang belum cocok."}</h2><p>${s.ending}</p><div class="notice">${good?"Laporan akhir: Raka ditemukan selamat. Dimas harus bertanggung jawab atas pencurian berkas dan kesaksian palsu.":"Baca ulang bukti dan bandingkan alibi para saksi. Kamu bisa mencoba lagi dengan memilih tersangka lain."}</div><button onclick="closeModal();switchView('evidence')">Tinjau bukti</button> <button onclick="closeModal();switchView('accuse')">Pilih lagi</button></div>`,good?"LAPORAN AKHIR":"HASIL INVESTIGASI");
+}
+function switchView(view){document.querySelectorAll(".view").forEach(v=>v.classList.toggle("active",v.id===view));document.querySelectorAll(".tab").forEach(t=>t.classList.toggle("active",t.dataset.view===view));window.scrollTo({top:document.querySelector("nav.tabs").offsetTop-85,behavior:"smooth"})}
+document.querySelectorAll(".tab").forEach(t=>t.addEventListener("click",()=>switchView(t.dataset.view)));
+function resetCase(){if(confirm("Mulai ulang kasus? Semua bukti dan progres akan dihapus.")){state={found:[],visited:[],talked:[],asked:[],done:false};save();render();switchView("locations")}}
+function showHelp(){showModal("Panduan penyelidikan",'<p><b>1.</b> Buka tab Lokasi dan periksa setiap tempat.</p><p><b>2.</b> Di tab Saksi, wawancarai semua orang. Pilih beberapa topik untuk menggali informasi tambahan.</p><p><b>3.</b> Lihat tab Bukti dan Papan Kasus untuk menyusun petunjuk.</p><p><b>4.</b> Jika sudah punya minimal 3 bukti dan mewawancarai 2 saksi, buka Kesimpulan dan pilih tersangka.</p><div class="notice">Tips: kasus ini fiktif. Tidak ada jawaban yang perlu dicari di internet—semua petunjuk ada di dalam game.</div>','PETUNJUK PEMAIN')}
+document.getElementById("modalBackdrop").addEventListener("click",e=>{if(e.target.id==="modalBackdrop")closeModal()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape")closeModal()});
+load();render();
+</script>
+</body>
+</html>'''
+
+path = Path("/mnt/data/case_404_detektif.html")
+path.write_text(html, encoding="utf-8")
+print(f"Website berhasil dibuat: {path} ({path.stat().st_size:,} bytes)")
